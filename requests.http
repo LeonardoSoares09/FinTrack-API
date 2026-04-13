@@ -1,0 +1,26 @@
+### Criar categoria
+POST http://localhost:8080/categories
+Content-Type: application/json
+
+{
+    "name": "Alimentação",
+    "description": "Gastos com comida"
+}
+
+### Listar categorias
+GET http://localhost:8080/categories
+
+### Criar Transação
+POST http://localhost:8080/transactions
+Content-Type: application/json
+
+{
+    "amount": 1200.00,
+    "type": "RECEITA",
+    "date": "2026-04-13",
+    "description": "Salário",
+    "categoryId": "7d0d70ea-249f-40bf-9fb5-d9c51f057465"
+}
+
+### Listar transactions
+GET http://localhost:8080/transactions
