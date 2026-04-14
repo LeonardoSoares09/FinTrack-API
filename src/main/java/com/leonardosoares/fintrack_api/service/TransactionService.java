@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.leonardosoares.fintrack_api.config.exception.ResourceNotFoundException;
 import com.leonardosoares.fintrack_api.controller.dto.TransactionRequest;
 import com.leonardosoares.fintrack_api.model.Category;
 import com.leonardosoares.fintrack_api.model.Transaction;
@@ -41,7 +42,7 @@ public class TransactionService {
     }
 
     public Transaction getTransactionById(UUID id) {
-        return transactionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Transaction not found!"));
+        return transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction not found!"));
     }
 
     public Transaction updateTransaction(UUID id, Transaction transaction) {

@@ -1,3 +1,26 @@
+### Registrar usuário
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+    "name": "Leonardo",
+    "email": "leonardo@email.com",
+    "password": "123456"
+}
+
+### Login
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+    "email": "leonardo@email.com",
+    "password": "123456"
+}
+
+### Listar transações (autenticado)
+GET http://localhost:8080/transactions
+Authorization: Bearer 
+
 ### Criar categoria
 POST http://localhost:8080/categories
 Content-Type: application/json
@@ -23,4 +46,6 @@ Content-Type: application/json
 }
 
 ### Listar transactions
-GET http://localhost:8080/transactions
+GET http://localhost:8080/transactions/00000000-0000-0000-0000-000000000000
+
+GET http://localhost:8080/categories/d9c51f057465
