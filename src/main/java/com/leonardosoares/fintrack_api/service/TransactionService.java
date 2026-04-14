@@ -3,16 +3,19 @@ package com.leonardosoares.fintrack_api.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.leonardosoares.fintrack_api.config.exception.ResourceNotFoundException;
 import com.leonardosoares.fintrack_api.controller.dto.TransactionRequest;
+import com.leonardosoares.fintrack_api.controller.dto.TransactionResponse;
+import com.leonardosoares.fintrack_api.mapper.TransactionMapper;
 import com.leonardosoares.fintrack_api.model.Category;
 import com.leonardosoares.fintrack_api.model.Transaction;
+import com.leonardosoares.fintrack_api.model.User;
 import com.leonardosoares.fintrack_api.repository.CategoryRepository;
 import com.leonardosoares.fintrack_api.repository.TransactionRepository;
-
-import jakarta.persistence.EntityNotFoundException;
+import com.leonardosoares.fintrack_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,11 +24,17 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final TransactionMapper transactionMapper;
 
-    public Transaction createTransaction (TransactionRequest dto) {
+    public TransactionResponse createTransaction (TransactionRequest dto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(email));
 
         Category category = categoryRepository.findById(dto.categoryId())
-        .orElseThrow(() -> new EntityNotFoundException("Category not found!"));
+        .orElseThrow(() -> new ResourceNotFoundException(email));
 
         Transaction t = new Transaction();
         t.setAmount(dto.amount());
@@ -33,28 +42,44 @@ public class TransactionService {
         t.setDate(dto.date());
         t.setDescription(dto.description());
         t.setCategory(category);
+        t.setUser(user);
 
-        return transactionRepository.save(t);
+        transactionRepository.save(t);
+
+        TransactionResponse transactionResponse = transactionMapper.toResponse(t);
+
+        return transactionResponse;
     }
 
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
+    public List<TransactionResponse> getAllTransactionsByUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(email));
+        return transactionRepository.findAllByUser(user)
+        .stream()
+        .map(transaction -> transactionMapper.toResponse(transaction))
+        .toList();
     }
 
-    public Transaction getTransactionById(UUID id) {
-        return transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction not found!"));
+    public TransactionResponse getTransactionById(UUID id) {
+        Transaction t = transactionRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Transaction not found!"));
+
+        return transactionMapper.toResponse(t);
     }
 
-    public Transaction updateTransaction(UUID id, Transaction transaction) {
-        Transaction t = getTransactionById(id);
-        t.setAmount(transaction.getAmount());
-        t.setType(transaction.getType());
-        t.setDate(transaction.getDate());
-        t.setDescription(transaction.getDescription());
-        t.setCategory(transaction.getCategory());
-        //acho que do user nao teria como trocar ne
+    public TransactionResponse updateTransaction(UUID id, TransactionRequest dto) {
+        Transaction t = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction not found!"));
 
-        return transactionRepository.save(t);
+        Category c = categoryRepository.findById(dto.categoryId()).orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
+
+        t.setAmount(dto.amount());
+        t.setType(dto.type());
+        t.setDate(dto.date());
+        t.setDescription(dto.description());
+        t.setCategory(c);
+
+        return transactionMapper.toResponse(transactionRepository.save(t));
     }
 
     public void deleteTransaction(UUID id) {

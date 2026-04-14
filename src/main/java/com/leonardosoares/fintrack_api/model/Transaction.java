@@ -47,8 +47,6 @@ public class Transaction {
     private String description;
     @ManyToOne
     private Category category;
-    /*
     @ManyToOne
     private User user;
- */ 
 }

@@ -17,12 +17,53 @@ Content-Type: application/json
     "password": "123456"
 }
 
+### Criar transação
+POST http://localhost:8080/transactions
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYxOTEwNTUsImV4cCI6MTc3NjI3NzQ1NX0.vgwtYUfYZjS3brXvex4-QiosuVlouJphHjQE85uOYPA
+Content-Type: application/json
+
+{
+    "amount": 12200.00,
+    "type": "RECEITA",
+    "date": "2026-04-14",
+    "description": "Salário",
+    "categoryId": "f4bb51dc-fb5e-424c-8063-50ee321b2655"
+}
+
+### Listar transações
+GET http://localhost:8080/transactions
+Authorization: Bearer seu-token
+
+### Criar categoria
+POST http://localhost:8080/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYxODgzMzYsImV4cCI6MTc3NjI3NDczNn0.-Fge4iDDYoMf9AnsFsyirDeXFYplYOEJ6gIsq6tH4CM
+Content-Type: application/json
+
+{
+    "name": "Alimentação",
+    "description": "Gastos com comida"
+}
+
+### Criar Transação
+POST http://localhost:8080/transactions
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYxODgzMzYsImV4cCI6MTc3NjI3NDczNn0.-Fge4iDDYoMf9AnsFsyirDeXFYplYOEJ6gIsq6tH4CM
+Content-Type: application/json
+
+{
+    "amount": 1200.00,
+    "type": "RECEITA",
+    "date": "2026-04-14",
+    "description": "Salário",
+    "categoryId": "68ca276c-60c9-4246-963b-192402464d59"
+}
+
 ### Listar transações (autenticado)
 GET http://localhost:8080/transactions
 Authorization: Bearer 
 
 ### Criar categoria
 POST http://localhost:8080/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYxOTA1MDksImV4cCI6MTc3NjI3NjkwOX0.djazd3MV0xobBlOCUMicNVwBEPbh0KxCjl1Ec7KnX2I
 Content-Type: application/json
 
 {

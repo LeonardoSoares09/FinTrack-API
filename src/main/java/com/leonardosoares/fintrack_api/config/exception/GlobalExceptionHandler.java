@@ -23,6 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
+        ex.printStackTrace();
         ErrorResponse error = new ErrorResponse(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             "An unexpected error occurred",
@@ -32,12 +33,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-    ErrorResponse error = new ErrorResponse(
-        HttpStatus.BAD_REQUEST.value(),
-        "Invalid parameter format: " + ex.getName(),
-        System.currentTimeMillis()
-    );
-    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-}
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        ErrorResponse error = new ErrorResponse(
+         HttpStatus.BAD_REQUEST.value(),
+            "Invalid parameter format: " + ex.getName(),
+             System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 }

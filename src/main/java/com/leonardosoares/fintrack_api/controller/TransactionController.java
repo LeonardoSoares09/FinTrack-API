@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.leonardosoares.fintrack_api.controller.dto.TransactionRequest;
+import com.leonardosoares.fintrack_api.controller.dto.TransactionResponse;
 import com.leonardosoares.fintrack_api.model.Transaction;
 import com.leonardosoares.fintrack_api.service.TransactionService;
 
@@ -30,30 +31,30 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping
-    public ResponseEntity<Transaction> create(@RequestBody TransactionRequest dto, HttpServletRequest request) {
-        Transaction transaction = transactionService.createTransaction(dto);
+    public ResponseEntity<TransactionResponse> create(@RequestBody TransactionRequest dto, HttpServletRequest request) {
+        TransactionResponse transaction = transactionService.createTransaction(dto);
 
         URI location = ServletUriComponentsBuilder.fromRequestUri(request)
                 .path("/{id}")
-                .buildAndExpand(transaction.getId())
+                .buildAndExpand(transaction.id())
                 .toUri();
         return ResponseEntity.created(location).body(transaction);
     }
 
     @GetMapping
-    public ResponseEntity<List<Transaction>> getAll() {
-        var list = transactionService.getAllTransactions();
+    public ResponseEntity<List<TransactionResponse>> getAll() {
+        var list = transactionService.getAllTransactionsByUser();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Transaction> getById(@PathVariable UUID id) {
+    public ResponseEntity<TransactionResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(transactionService.getTransactionById(id)); 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Transaction> update(@PathVariable UUID id, @RequestBody Transaction transaction) {
-        var c = transactionService.updateTransaction(id, transaction);
+    public ResponseEntity<TransactionResponse> update(@PathVariable UUID id, @RequestBody TransactionRequest dto) {
+        var c = transactionService.updateTransaction(id, dto);
         return ResponseEntity.ok(c);
     }
     
