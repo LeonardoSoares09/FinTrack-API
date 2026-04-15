@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.leonardosoares.fintrack_api.controller.dto.TransactionRequest;
 import com.leonardosoares.fintrack_api.controller.dto.TransactionResponse;
+import com.leonardosoares.fintrack_api.controller.dto.summary.SummaryResponse;
 import com.leonardosoares.fintrack_api.service.TransactionService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -62,5 +63,10 @@ public class TransactionController {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         transactionService.deleteTransaction(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/summary")
+    public ResponseEntity<SummaryResponse> getSummary() {
+        return ResponseEntity.ok(transactionService.getSummary());
     }
 }

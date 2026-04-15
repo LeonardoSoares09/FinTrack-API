@@ -17,6 +17,27 @@ Content-Type: application/json
     "password": "123456"
 }
 
+### Criar categoria válida
+POST http://localhost:8080/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYyMTM0NDAsImV4cCI6MTc3NjI5OTg0MH0.HxHxB14zEYyZPblTwPe-yJ1gA6AdAKD7PBG_1j9hx24
+Content-Type: application/json
+
+{
+    "name": "Alimentação",
+    "description": "Gastos com comida"
+}
+
+### Criar categoria inválida (sem nome)
+POST http://localhost:8080/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYyMTM0NDAsImV4cCI6MTc3NjI5OTg0MH0.HxHxB14zEYyZPblTwPe-yJ1gA6AdAKD7PBG_1j9hx24
+Content-Type: application/json
+
+{
+    "name": "",
+    "description": "Gastos com comida"
+}
+
+
 ### Criar transação
 POST http://localhost:8080/transactions
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYxOTEwNTUsImV4cCI6MTc3NjI3NzQ1NX0.vgwtYUfYZjS3brXvex4-QiosuVlouJphHjQE85uOYPA

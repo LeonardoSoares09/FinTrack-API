@@ -1,5 +1,6 @@
 package com.leonardosoares.fintrack_api.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Service;
 import com.leonardosoares.fintrack_api.config.exception.ResourceNotFoundException;
 import com.leonardosoares.fintrack_api.controller.dto.TransactionRequest;
 import com.leonardosoares.fintrack_api.controller.dto.TransactionResponse;
+import com.leonardosoares.fintrack_api.controller.dto.summary.SummaryResponse;
 import com.leonardosoares.fintrack_api.mapper.TransactionMapper;
 import com.leonardosoares.fintrack_api.model.Category;
 import com.leonardosoares.fintrack_api.model.Transaction;
 import com.leonardosoares.fintrack_api.model.User;
+import com.leonardosoares.fintrack_api.model.enums.TransactionType;
 import com.leonardosoares.fintrack_api.repository.CategoryRepository;
 import com.leonardosoares.fintrack_api.repository.TransactionRepository;
 import com.leonardosoares.fintrack_api.repository.UserRepository;
@@ -53,7 +56,6 @@ public class TransactionService {
 
     public List<TransactionResponse> getAllTransactionsByUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(email));
         return transactionRepository.findAllByUser(user)
         .stream()
@@ -84,5 +86,21 @@ public class TransactionService {
 
     public void deleteTransaction(UUID id) {
         transactionRepository.deleteById(id);
+    }
+
+    public SummaryResponse getSummary() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(email));
+
+        BigDecimal totalDespesa = transactionRepository.sumByUserAndType(user, TransactionType.DESPESA);
+        BigDecimal totalReceita = transactionRepository.sumByUserAndType(user, TransactionType.RECEITA);
+
+        totalDespesa = totalDespesa != null ? totalDespesa : BigDecimal.ZERO;
+        totalReceita = totalReceita != null ? totalReceita : BigDecimal.ZERO;
+
+        BigDecimal total = totalReceita.subtract(totalDespesa);
+
+        SummaryResponse summaryResponse = new SummaryResponse(totalReceita, totalDespesa, total);
+        return summaryResponse;
     }
 }
