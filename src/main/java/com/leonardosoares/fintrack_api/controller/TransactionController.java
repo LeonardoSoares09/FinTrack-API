@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +47,8 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponse>> getAll(@RequestParam(required = false) TransactionType type, @RequestParam(required = false) UUID categoryId) {
-        return ResponseEntity.ok(transactionService.getAllTransactionsByUser(type, categoryId));
+    public ResponseEntity<Page<TransactionResponse>> getAll(@RequestParam(required = false) TransactionType type, @RequestParam(required = false) UUID categoryId, Pageable pageable) {
+        return ResponseEntity.ok(transactionService.getAllTransactionsByUser(type, categoryId, pageable));
     }
 
     @GetMapping("/{id}")

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,6 @@ import com.leonardosoares.fintrack_api.repository.CategoryRepository;
 import com.leonardosoares.fintrack_api.repository.TransactionRepository;
 import com.leonardosoares.fintrack_api.repository.UserRepository;
 import com.leonardosoares.fintrack_api.spec.TransactionSpecification;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -57,7 +58,7 @@ public class TransactionService {
         return transactionResponse;
     }
 
-    public List<TransactionResponse> getAllTransactionsByUser(TransactionType type, UUID categoryId) {
+    public Page<TransactionResponse> getAllTransactionsByUser(TransactionType type, UUID categoryId, Pageable pageable) {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email)
@@ -68,10 +69,8 @@ public class TransactionService {
             .and(TransactionSpecification.hasType(type))
             .and(TransactionSpecification.hasCategoryId(categoryId));
 
-        return transactionRepository.findAll(spec)
-            .stream()
-            .map(transaction -> transactionMapper.toResponse(transaction))
-            .toList();
+        return transactionRepository.findAll(spec, pageable)
+            .map(transactionMapper::toResponse);
     }
 
     public TransactionResponse getTransactionById(UUID id) {
