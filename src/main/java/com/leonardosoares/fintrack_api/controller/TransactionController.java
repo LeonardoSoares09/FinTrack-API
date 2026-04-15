@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.leonardosoares.fintrack_api.controller.dto.TransactionRequest;
 import com.leonardosoares.fintrack_api.controller.dto.TransactionResponse;
 import com.leonardosoares.fintrack_api.controller.dto.summary.SummaryResponse;
+import com.leonardosoares.fintrack_api.model.enums.TransactionType;
 import com.leonardosoares.fintrack_api.service.TransactionService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,9 +45,8 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponse>> getAll() {
-        var list = transactionService.getAllTransactionsByUser();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<List<TransactionResponse>> getAll(@RequestParam(required = false) TransactionType type, @RequestParam(required = false) UUID categoryId) {
+        return ResponseEntity.ok(transactionService.getAllTransactionsByUser(type, categoryId));
     }
 
     @GetMapping("/{id}")

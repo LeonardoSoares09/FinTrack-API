@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ import com.leonardosoares.fintrack_api.model.enums.TransactionType;
 import com.leonardosoares.fintrack_api.repository.CategoryRepository;
 import com.leonardosoares.fintrack_api.repository.TransactionRepository;
 import com.leonardosoares.fintrack_api.repository.UserRepository;
+import com.leonardosoares.fintrack_api.spec.TransactionSpecification;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -54,13 +57,21 @@ public class TransactionService {
         return transactionResponse;
     }
 
-    public List<TransactionResponse> getAllTransactionsByUser() {
+    public List<TransactionResponse> getAllTransactionsByUser(TransactionType type, UUID categoryId) {
+
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(email));
-        return transactionRepository.findAllByUser(user)
-        .stream()
-        .map(transaction -> transactionMapper.toResponse(transaction))
-        .toList();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(email));
+
+        Specification<Transaction> spec = Specification
+            .where(TransactionSpecification.hasUser(user))
+            .and(TransactionSpecification.hasType(type))
+            .and(TransactionSpecification.hasCategoryId(categoryId));
+
+        return transactionRepository.findAll(spec)
+            .stream()
+            .map(transaction -> transactionMapper.toResponse(transaction))
+            .toList();
     }
 
     public TransactionResponse getTransactionById(UUID id) {

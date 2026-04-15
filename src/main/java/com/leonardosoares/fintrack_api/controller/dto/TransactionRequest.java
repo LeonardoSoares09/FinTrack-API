@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record TransactionRequest(
-    @NotBlank
+    @NotNull
     BigDecimal amount,
     @NotNull
     TransactionType type,
