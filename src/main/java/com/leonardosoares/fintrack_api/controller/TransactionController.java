@@ -17,10 +17,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.leonardosoares.fintrack_api.controller.dto.TransactionRequest;
 import com.leonardosoares.fintrack_api.controller.dto.TransactionResponse;
-import com.leonardosoares.fintrack_api.model.Transaction;
 import com.leonardosoares.fintrack_api.service.TransactionService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,7 +31,7 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping
-    public ResponseEntity<TransactionResponse> create(@RequestBody TransactionRequest dto, HttpServletRequest request) {
+    public ResponseEntity<TransactionResponse> create(@Valid @RequestBody TransactionRequest dto, HttpServletRequest request) {
         TransactionResponse transaction = transactionService.createTransaction(dto);
 
         URI location = ServletUriComponentsBuilder.fromRequestUri(request)
@@ -53,7 +53,7 @@ public class TransactionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TransactionResponse> update(@PathVariable UUID id, @RequestBody TransactionRequest dto) {
+    public ResponseEntity<TransactionResponse> update(@PathVariable UUID id, @Valid @RequestBody TransactionRequest dto) {
         var c = transactionService.updateTransaction(id, dto);
         return ResponseEntity.ok(c);
     }

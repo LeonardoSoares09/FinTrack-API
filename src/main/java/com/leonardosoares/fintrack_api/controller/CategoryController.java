@@ -1,8 +1,10 @@
 package com.leonardosoares.fintrack_api.controller;
 
-import com.leonardosoares.fintrack_api.model.Category;
+import com.leonardosoares.fintrack_api.controller.dto.CategoryRequest;
+import com.leonardosoares.fintrack_api.controller.dto.CategoryResponse;
 import com.leonardosoares.fintrack_api.service.CategoryService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,30 +22,30 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Category> create(@RequestBody Category category, HttpServletRequest request) {
-        categoryService.createCategory(category);
+    public ResponseEntity<CategoryResponse> create(@Valid @RequestBody CategoryRequest categoryRequest, HttpServletRequest request) {
+        CategoryResponse category = categoryService.createCategory(categoryRequest);
 
         URI location = ServletUriComponentsBuilder.fromRequestUri(request)
                 .path("/{id}")
-                .buildAndExpand(category.getId())
+                .buildAndExpand(category.id())
                 .toUri();
         return ResponseEntity.created(location).body(category);
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAll() {
+    public ResponseEntity<List<CategoryResponse>> getAll() {
         var list = categoryService.getAllCategories();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id)); //se nao achar o .ok vai retornar oq?
+    public ResponseEntity<CategoryResponse> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> update(@PathVariable UUID id, @RequestBody Category category) {
-        var c = categoryService.updateCategory(id, category);
+    public ResponseEntity<CategoryResponse> update(@PathVariable UUID id,@Valid @RequestBody CategoryRequest categoryRequest) {
+        var c = categoryService.updateCategory(id, categoryRequest);
         return ResponseEntity.ok(c);
     }
 

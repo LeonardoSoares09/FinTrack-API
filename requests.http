@@ -32,7 +32,7 @@ Content-Type: application/json
 
 ### Listar transações
 GET http://localhost:8080/transactions
-Authorization: Bearer seu-token
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYxOTEwNTUsImV4cCI6MTc3NjI3NzQ1NX0.vgwtYUfYZjS3brXvex4-QiosuVlouJphHjQE85uOYPA
 
 ### Criar categoria
 POST http://localhost:8080/categories
