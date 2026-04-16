@@ -17,6 +17,18 @@ Content-Type: application/json
     "password": "123456"
 }
 
+### Sem paginação (usa defaults: page=0, size=20)
+GET http://localhost:8080/transactions
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYyOTYxOTgsImV4cCI6MTc3NjM4MjU5OH0._qOCwBuXe2GOIjvikqROuN8F3vqBuNlrn6ECrwrQEe0
+
+### Com paginação
+GET http://localhost:8080/transactions?page=0&size=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYyOTYxOTgsImV4cCI6MTc3NjM4MjU5OH0._qOCwBuXe2GOIjvikqROuN8F3vqBuNlrn6ECrwrQEe0
+
+### Página 1
+GET http://localhost:8080/transactions?page=1&size=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYyOTYxOTgsImV4cCI6MTc3NjM4MjU5OH0._qOCwBuXe2GOIjvikqROuN8F3vqBuNlrn6ECrwrQEe0
+
 ### Criar despesa
 POST http://localhost:8080/transactions
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uYXJkb0BlbWFpbC5jb20iLCJpYXQiOjE3NzYyOTU1MjMsImV4cCI6MTc3NjM4MTkyM30.80EsBQQ9J96ogyKAMmRPAJDrubM9pgrXPfEy0829lDc
