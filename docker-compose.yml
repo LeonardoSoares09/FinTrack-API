@@ -3,10 +3,22 @@ services:
     image: "postgres:16"
     ports:
       - 5432:5432
-
     environment:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
       POSTGRES_DB: default_database
     volumes:
       - ./db-data/:/var/lib/postgresql/data/
+
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/default_database
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      JWT_SECRET: LpNt8m87HaMkTID4EX/xzUDxiv1GrulQAuRqss16zj4=
+      JWT_EXPIRATION: 86400000
+    depends_on:
+      - database
